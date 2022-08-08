@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/mmkhmmkh/dbuild/pkg/distcc"
+	"github.com/mmkhmmkh/dbuild/pkg/git"
 	"github.com/mmkhmmkh/dbuild/pkg/hamctl"
 	"github.com/mmkhmmkh/dbuild/pkg/utils"
 	"os"
@@ -10,9 +12,15 @@ import (
 	"time"
 )
 
-func StartWorker(controllerID, workerID string, arguments string) error {
+const (
+	CloneDirectory = "repo"
+)
+
+// func StartWorker(controllerID, workerID string, arguments string) error {
+func StartWorker(controllerID, workerID string) error {
 	fmt.Printf("[CTRL] Starting new worker...\n")
-	err := hamctl.CreateApp(utils.DbuildPrefix+utils.WorkerContext+"-"+controllerID+"-"+workerID, utils.DbuildRepo, utils.DbuildBranch, utils.WorkerContext, "/dbuild/bin/"+utils.WorkerContext, workerID+" "+arguments)
+	//err := hamctl.CreateApp(utils.DbuildPrefix+utils.WorkerContext+"-"+controllerID+"-"+workerID, utils.DbuildRepo, utils.DbuildBranch, utils.WorkerContext, "/dbuild/bin/"+utils.WorkerContext, workerID+" "+arguments)
+	err := hamctl.CreateApp(utils.DbuildPrefix+utils.WorkerContext+"-"+controllerID+"-"+workerID, utils.DbuildRepo, utils.DbuildBranch, utils.WorkerContext, "/dbuild/bin/"+utils.WorkerContext, "")
 	if err != nil {
 		return err
 	}
@@ -51,7 +59,7 @@ func main() {
 	id := args[0]
 	n, _ := strconv.Atoi(args[1])
 	repo := args[2]
-	command := args[3]
+	//command := args[3]
 	env := args[4]
 
 	err := hamctl.Initialize(env)
@@ -61,25 +69,49 @@ func main() {
 	}
 
 	fmt.Printf("[CTRL] Running %v workers...\n", n)
+
+	var workers []string
+
 	for i := 1; i <= n; i++ {
-		err := StartWorker(id, strconv.Itoa(i), fmt.Sprintf("%s %s %s", repo, command, env))
+		//err := StartWorker(id, strconv.Itoa(i), fmt.Sprintf("%s %s %s", repo, command, env))
+		err := StartWorker(id, strconv.Itoa(i))
 		if err != nil {
 			fmt.Printf("[CTRL] [WORKER] [ERROR] %v\n", err)
 			return
 		}
+
+		workers = append(workers, utils.DbuildPrefix+utils.WorkerContext+"-"+id+"-"+strconv.Itoa(i))
 	}
 
-	fmt.Println("READY")
-	time.Sleep(120 * time.Second)
-	fmt.Println("DONE")
+	time.Sleep(10 * time.Second)
 
-	fmt.Printf("[CTRL] Removing %v workers...\n", n)
-	for i := 1; i < n; i++ {
-		err := hamctl.RemoveApp(utils.DbuildPrefix + utils.WorkerContext + "-" + id + "-" + strconv.Itoa(i))
-		if err != nil {
-			fmt.Println("[CTRL] [WORKER] [ERROR] Failed to remove worker.")
-		}
+	fmt.Printf("[CTRL] Workers Ready.\n")
+
+	err = git.CloneRepo(repo, CloneDirectory)
+	if err != nil {
+		fmt.Printf("[CTRL] [ERROR] %v\n", err)
+		return
 	}
 
-	gracefulShutdown(id)
+	err = distcc.Compile(CloneDirectory, workers)
+	if err != nil {
+		fmt.Printf("[CTRL] [ERROR] %v\n", err)
+		return
+	}
+
+	fmt.Printf("[CTRL] Compiled!\n")
+
+	for true {
+		time.Sleep(10 * time.Second)
+	}
+
+	//fmt.Printf("[CTRL] Removing %v workers...\n", n)
+	//for i := 1; i < n; i++ {
+	//	err := hamctl.RemoveApp(utils.DbuildPrefix + utils.WorkerContext + "-" + id + "-" + strconv.Itoa(i))
+	//	if err != nil {
+	//		fmt.Println("[CTRL] [WORKER] [ERROR] Failed to remove worker.")
+	//	}
+	//}
+	//
+	//gracefulShutdown(id)
 }
