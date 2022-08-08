@@ -62,7 +62,7 @@ func main() {
 
 	fmt.Printf("[CTRL] Running %v workers...\n", n)
 	for i := 1; i < n; i++ {
-		err := StartWorker(id, strconv.Itoa(i), fmt.Sprintf("%s %s", repo, command))
+		err := StartWorker(id, strconv.Itoa(i), fmt.Sprintf("%s %s %s", repo, command, env))
 		if err != nil {
 			fmt.Printf("[CTRL] [WORKER] [ERROR] %v\n", err)
 			return
