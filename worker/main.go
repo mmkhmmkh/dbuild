@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -13,8 +14,15 @@ func main() {
 	fmt.Println("##   By Mahdi Khancherli   ##")
 	fmt.Println("#############################")
 
-	if len(os.Args) != 4 {
-		fmt.Printf("[WORKER] [ERROR] Wrong args count (%v, %v).", os.Args, len(os.Args))
+	if len(os.Args) != 2 {
+		fmt.Printf("[WORKER] [ERROR] Wrong args count.\n")
+		return
+	}
+
+	args := strings.Split(os.Args[1], " ")
+
+	if len(args) != 3 {
+		fmt.Printf("[WORKER] [ERROR] Wrong args count.\n")
 		return
 	}
 

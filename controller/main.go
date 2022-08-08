@@ -6,6 +6,7 @@ import (
 	"github.com/mmkhmmkh/dbuild/pkg/utils"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -35,25 +36,22 @@ func main() {
 	fmt.Println("##   By Mahdi Khancherli   ##")
 	fmt.Println("#############################")
 
-	fmt.Printf("%v\n", os.Args[0])
-	fmt.Printf("%v\n", os.Args[1])
-
-	fmt.Printf("%v\n", os.Args)
-
-	if len(os.Args) != 5 {
-		fmt.Printf("[CTRL] [ERROR] Wrong args count (%v, %v).", os.Args, len(os.Args))
+	if len(os.Args) != 2 {
+		fmt.Printf("[CTRL] [ERROR] Wrong args count.\n")
 		return
 	}
 
-	fmt.Println("1")
-	id := os.Args[1]
-	fmt.Println("2")
-	n, _ := strconv.Atoi(os.Args[2])
-	fmt.Println("3")
-	repo := os.Args[3]
-	fmt.Println("4")
-	command := os.Args[4]
-	fmt.Println("5")
+	args := strings.Split(os.Args[1], " ")
+
+	if len(args) != 4 {
+		fmt.Printf("[CTRL] [ERROR] Wrong args count.\n")
+		return
+	}
+
+	id := args[0]
+	n, _ := strconv.Atoi(args[1])
+	repo := args[2]
+	command := args[3]
 
 	fmt.Printf("[CTRL] Running %v workers...\n", n)
 	for i := 1; i < n; i++ {
