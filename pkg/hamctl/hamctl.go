@@ -252,7 +252,7 @@ func CreateApp(appName string, repoName string, branchName string, buildContext 
 		line := scanner.Text()
 		//fmt.Println(line)
 		if strings.Contains(line, "Auto deploy after push") {
-			io.WriteString(stdinOut, "Yes\r")
+			io.WriteString(stdinOut, "yes\r")
 			break
 		}
 	}
