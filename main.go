@@ -19,7 +19,7 @@ var controllersCount int
 
 func StartController(arguments string) error {
 	fmt.Printf("[ORCH] Starting new controller...\n")
-	err := hamctl.CreateApp(dbuildPrefix+controllerContext+"-"+strconv.Itoa(controllersCount+1), dbuildRepo, dbuildBranch, controllerContext, "./bin/controller", arguments)
+	err := hamctl.CreateApp(dbuildPrefix+controllerContext+"-"+strconv.Itoa(controllersCount+1), dbuildRepo, dbuildBranch, controllerContext, "/dbuild/bin/controller", arguments)
 	if err != nil {
 		return err
 	}
