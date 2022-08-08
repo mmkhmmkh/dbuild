@@ -22,7 +22,7 @@ func Initialize(hamctlconfig string) error {
 	if hamctlconfig == "" {
 		return fmt.Errorf("no HAMCTLCONFIG")
 	}
-	err := os.WriteFile("~/.hamctlconfig", []byte(hamctlconfig), os.ModeType)
+	err := os.WriteFile("~/.hamctlconfig", []byte(hamctlconfig), os.ModePerm)
 	if err != nil {
 		return err
 	}
