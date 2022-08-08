@@ -5,6 +5,9 @@ WORKDIR /dbuild
 #RUN go build -mod=vendor -ldflags="-w -s" -o bin/worker worker/main.go
 #RUN chmod +x tools/hamctl
 
+ENV HOME=/home/distcc
+RUN useradd -s /bin/bash distcc
+
 RUN wget -O distcc.tar.gz https://github.com/distcc/distcc/releases/download/v3.4/distcc-3.4.tar.gz; \
     tar -xf distcc.tar.gz
 RUN apt-get update; \
@@ -15,10 +18,8 @@ RUN apt-get update; \
     pip3 --no-cache-dir install --upgrade pip; \
     rm -rf /var/lib/apt/lists/*; \
     cd $current_dir;
-RUN (cd distcc-3.4 ; ./configure && make && make install)
+RUN (cd distcc-3.4 ; ./configure && make && make install && update-distcc-symlinks)
 
-ENV HOME=/home/distcc
-RUN useradd -s /bin/bash distcc
 
 # Define how to start distccd by default
 # (see "man distccd" for more information)
@@ -31,7 +32,8 @@ ENTRYPOINT [\
   "--stats", \
   "--stats-port", "3633", \
   "--log-stderr", \
-  "--listen", "0.0.0.0"\
+  "--listen", "0.0.0.0", \
+  "--log-level", "debug" \
 ]
 
 # By default the distcc server will accept clients from everywhere.
