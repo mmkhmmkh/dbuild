@@ -18,6 +18,17 @@ const (
 	organizationName = "vbhammk"
 )
 
+func Initialize(hamctlconfig string) error {
+	if hamctlconfig == "" {
+		return fmt.Errorf("no HAMCTLCONFIG")
+	}
+	err := os.WriteFile("~/.hamctlconfig", []byte(hamctlconfig), os.ModeType)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func RemoveApp(appName string) error {
 	var args []string
 	args = append(args, "apps", "del")

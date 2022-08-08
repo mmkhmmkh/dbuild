@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mmkhmmkh/dbuild/pkg/hamctl"
 	"github.com/mmkhmmkh/dbuild/pkg/utils"
+	"os"
 	"strconv"
 )
 
@@ -24,11 +25,16 @@ func StartController(arguments string) error {
 
 // main is entry for orchestrator node
 func main() {
-
 	fmt.Println("#############################")
 	fmt.Println("##   dbuild Orchestrator   ##")
 	fmt.Println("##   By Mahdi Khancherli   ##")
 	fmt.Println("#############################")
+
+	err := hamctl.Initialize(os.Getenv("HAMCTLCONFIG"))
+	if err != nil {
+		fmt.Printf("[ORCH] [ERROR] %v\n", err)
+		return
+	}
 
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) {
@@ -41,14 +47,14 @@ func main() {
 		n := c.Query("n")
 		repo := c.Query("repo")
 		command := c.Query("command")
-		err := StartController(fmt.Sprintf("%s %s %s", n, repo, command))
+		err := StartController(fmt.Sprintf("%s %s %s %s", n, repo, command, os.Getenv("HAMCTLCONFIG")))
 		if err != nil {
 			fmt.Printf("[ORCH] [CTRL] [ERROR] %v\n", err)
 			return
 		}
 	})
 
-	err := r.Run("localhost:8080")
+	err = r.Run("localhost:8080")
 	if err != nil {
 		fmt.Printf("[ORCH] [ERROR] %v\n", err)
 	}
