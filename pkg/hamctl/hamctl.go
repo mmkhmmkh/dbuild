@@ -110,7 +110,7 @@ func RemoveApp(appName string) error {
 }
 
 // CreateApp creates new app on Hamravesh PaaS
-func CreateApp(appName string, repoName string, branchName string, buildContext string) error {
+func CreateApp(appName string, repoName string, branchName string, buildContext string, command string, arguments string) error {
 	var args []string
 	args = append(args, "apps", "create")
 	args = append(args, "-n", appName)
@@ -189,9 +189,10 @@ func CreateApp(appName string, repoName string, branchName string, buildContext 
 		line := scanner.Text()
 		//fmt.Println(line)
 		if strings.Contains(line, fmt.Sprintf("➤ %s", repoName)) {
+			//fmt.Println("About to Accept " + line)
 			io.WriteString(stdinOut, "\r")
 			break
-		} else if strings.Contains(line, repoName) || strings.Contains(line, "➤ ") {
+		} else if strings.Contains(line, repoName) {
 			//fmt.Println("HERE")
 			io.WriteString(stdinOut, "\x1B[B")
 		}
@@ -208,7 +209,7 @@ func CreateApp(appName string, repoName string, branchName string, buildContext 
 		if strings.Contains(line, fmt.Sprintf("➤ %s", branchName)) {
 			io.WriteString(stdinOut, "\r")
 			break
-		} else if strings.Contains(line, branchName) || strings.Contains(line, "➤ ") {
+		} else if strings.Contains(line, branchName) {
 			io.WriteString(stdinOut, "\x1B[B")
 		}
 		//time.Sleep(100 * time.Millisecond)
@@ -218,7 +219,7 @@ func CreateApp(appName string, repoName string, branchName string, buildContext 
 		line := scanner.Text()
 		//fmt.Println(line)
 		if strings.Contains(line, "Dockerfile address") {
-			io.WriteString(stdinOut, fmt.Sprintf("./%s/.\r", buildContext))
+			io.WriteString(stdinOut, fmt.Sprintf("./%s/Dockerfile\r", buildContext))
 			break
 		}
 	}
@@ -254,7 +255,7 @@ func CreateApp(appName string, repoName string, branchName string, buildContext 
 		line := scanner.Text()
 		//fmt.Println(line)
 		if strings.Contains(line, "command of your project") {
-			io.WriteString(stdinOut, "\r")
+			io.WriteString(stdinOut, fmt.Sprintf("%s\r", command))
 			break
 		}
 	}
@@ -263,7 +264,7 @@ func CreateApp(appName string, repoName string, branchName string, buildContext 
 		line := scanner.Text()
 		//fmt.Println(line)
 		if strings.Contains(line, "Args of running command") {
-			io.WriteString(stdinOut, "\r")
+			io.WriteString(stdinOut, fmt.Sprintf("%s\r", arguments))
 			break
 		}
 	}
