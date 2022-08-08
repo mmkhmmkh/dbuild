@@ -219,7 +219,7 @@ func CreateApp(appName string, repoName string, branchName string, buildContext 
 		line := scanner.Text()
 		//fmt.Println(line)
 		if strings.Contains(line, "Dockerfile address") {
-			io.WriteString(stdinOut, fmt.Sprintf("./%s/Dockerfile\r", buildContext))
+			io.WriteString(stdinOut, fmt.Sprintf("./%s.Dockerfile\r", buildContext))
 			break
 		}
 	}
@@ -228,7 +228,7 @@ func CreateApp(appName string, repoName string, branchName string, buildContext 
 		line := scanner.Text()
 		//fmt.Println(line)
 		if strings.Contains(line, "Build Context") {
-			io.WriteString(stdinOut, fmt.Sprintf("./%s/.\r", buildContext))
+			io.WriteString(stdinOut, fmt.Sprintf(".\r", buildContext))
 			break
 		}
 	}
