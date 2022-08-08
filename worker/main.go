@@ -14,7 +14,7 @@ func main() {
 	fmt.Println("#############################")
 
 	if len(os.Args) != 4 {
-		fmt.Println("[WORKER] [ERROR] Wrong args count.")
+		fmt.Printf("[WORKER] [ERROR] Wrong args count (%v, %v).", os.Args, len(os.Args))
 		return
 	}
 

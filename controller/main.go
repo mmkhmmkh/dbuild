@@ -28,7 +28,7 @@ func main() {
 	fmt.Println("#############################")
 
 	if len(os.Args) != 5 {
-		fmt.Println("[CTRL] [ERROR] Wrong args count.")
+		fmt.Printf("[CTRL] [ERROR] Wrong args count (%v, %v).", os.Args, len(os.Args))
 		return
 	}
 
