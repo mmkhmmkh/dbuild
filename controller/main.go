@@ -101,7 +101,6 @@ func main() {
 	err = distcc.Compile(CloneDirectory, workers)
 	if err != nil {
 		fmt.Printf("[CTRL] [ERROR] %v\n", err)
-		return
 	}
 
 	fmt.Printf("[CTRL] Compiled!\n")
