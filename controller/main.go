@@ -35,6 +35,9 @@ func main() {
 	fmt.Println("##   By Mahdi Khancherli   ##")
 	fmt.Println("#############################")
 
+	fmt.Printf("%v\n", os.Args[0])
+	fmt.Printf("%v\n", os.Args[1])
+
 	fmt.Printf("%v\n", os.Args)
 
 	if len(os.Args) != 5 {
