@@ -18,7 +18,12 @@ const (
 
 // func StartWorker(controllerID, workerID string, arguments string) error {
 func StartWorker(controllerID, workerID string) error {
-	fmt.Printf("[CTRL] Starting new worker...\n")
+
+	workerName := utils.DbuildPrefix + utils.WorkerContext + "-" + controllerID + "-" + workerID
+	fmt.Printf("[CTRL] Starting new worker (%s)...\n", workerName)
+
+	hamctl.RemoveApp(workerName)
+
 	//err := hamctl.CreateApp(utils.DbuildPrefix+utils.WorkerContext+"-"+controllerID+"-"+workerID, utils.DbuildRepo, utils.DbuildBranch, utils.WorkerContext, "/dbuild/bin/"+utils.WorkerContext, workerID+" "+arguments)
 	err := hamctl.CreateApp(utils.DbuildPrefix+utils.WorkerContext+"-"+controllerID+"-"+workerID, utils.DbuildRepo, utils.DbuildBranch, utils.WorkerContext, "/dbuild/bin/"+utils.WorkerContext, "")
 	if err != nil {
