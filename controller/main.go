@@ -61,7 +61,7 @@ func main() {
 	}
 
 	fmt.Printf("[CTRL] Running %v workers...\n", n)
-	for i := 1; i < n; i++ {
+	for i := 1; i <= n; i++ {
 		err := StartWorker(id, strconv.Itoa(i), fmt.Sprintf("%s %s %s", repo, command, env))
 		if err != nil {
 			fmt.Printf("[CTRL] [WORKER] [ERROR] %v\n", err)
@@ -70,7 +70,7 @@ func main() {
 	}
 
 	fmt.Println("READY")
-	time.Sleep(60 * time.Second)
+	time.Sleep(120 * time.Second)
 	fmt.Println("DONE")
 
 	fmt.Printf("[CTRL] Removing %v workers...\n", n)
