@@ -4,22 +4,15 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/mmkhmmkh/dbuild/pkg/hamctl"
+	"github.com/mmkhmmkh/dbuild/pkg/utils"
 	"strconv"
-)
-
-const (
-	dbuildRepo        = "mmkhmmkh/dbuild"
-	controllerContext = "controller"
-	workerContext     = "worker"
-	dbuildBranch      = "master"
-	dbuildPrefix      = "dbuild-"
 )
 
 var controllersCount int
 
 func StartController(arguments string) error {
 	fmt.Printf("[ORCH] Starting new controller...\n")
-	err := hamctl.CreateApp(dbuildPrefix+controllerContext+"-"+strconv.Itoa(controllersCount+1), dbuildRepo, dbuildBranch, controllerContext, "/dbuild/bin/controller", arguments)
+	err := hamctl.CreateApp(utils.DbuildPrefix+utils.ControllerContext+"-"+strconv.Itoa(controllersCount+1), utils.DbuildRepo, utils.DbuildBranch, utils.ControllerContext, "/dbuild/bin/"+utils.ControllerContext, strconv.Itoa(controllersCount+1)+" "+arguments)
 	if err != nil {
 		return err
 	}
@@ -47,10 +40,10 @@ func main() {
 	r.GET("/submit", func(c *gin.Context) {
 		n := c.Query("n")
 		repo := c.Query("repo")
-		cmd := c.Query("cmd")
-		err := StartController(fmt.Sprintf("%s %s %s", n, repo, cmd))
+		command := c.Query("command")
+		err := StartController(fmt.Sprintf("%s %s %s", n, repo, command))
 		if err != nil {
-			fmt.Printf("[ORCH] [CONTROLLER] [ERROR] %v\n", err)
+			fmt.Printf("[ORCH] [CTRL] [ERROR] %v\n", err)
 			return
 		}
 	})
