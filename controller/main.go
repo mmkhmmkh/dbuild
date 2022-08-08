@@ -42,7 +42,7 @@ func gracefulShutdown(id string) {
 	}
 }
 
-// main is entry for controller node. args: [id n repo cmd env]
+// main is entry for controller node. args: [id n repo command env]
 func main() {
 	fmt.Println("#############################")
 	fmt.Println("##    dbuild Controller    ##")
@@ -64,7 +64,7 @@ func main() {
 	id := args[0]
 	n, _ := strconv.Atoi(args[1])
 	repo := args[2]
-	//command := args[3]
+	command := args[3]
 	env := args[4]
 
 	err := hamctl.Initialize(env)
@@ -98,7 +98,7 @@ func main() {
 		return
 	}
 
-	err = distcc.Compile(CloneDirectory, workers)
+	err = distcc.Compile(CloneDirectory, command, workers)
 	if err != nil {
 		fmt.Printf("[CTRL] [ERROR] %v\n", err)
 	}
