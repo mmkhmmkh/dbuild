@@ -42,7 +42,7 @@ func gracefulShutdown(id string) {
 	}
 }
 
-// main is entry for controller node. args: [id n repo command env]
+// main is entry for controller node. args: [id n repo env commands...]
 func main() {
 	fmt.Println("#############################")
 	fmt.Println("##    dbuild Controller    ##")
@@ -56,7 +56,7 @@ func main() {
 
 	args := strings.Split(os.Args[1], " ")
 
-	if len(args) != 5 {
+	if len(args) < 5 {
 		fmt.Printf("[CTRL] [ERROR] Wrong args count.\n")
 		return
 	}
@@ -64,8 +64,12 @@ func main() {
 	id := args[0]
 	n, _ := strconv.Atoi(args[1])
 	repo := args[2]
-	command := args[3]
-	env := args[4]
+	env := args[3]
+	var commands []string
+	for i := 4; i < len(args); i++ {
+		commands = append(commands, args[i])
+	}
+	command := strings.Join(commands, " ")
 
 	err := hamctl.Initialize(env)
 	if err != nil {
