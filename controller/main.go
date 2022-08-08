@@ -20,6 +20,14 @@ func StartWorker(controllerID, workerID string, arguments string) error {
 	return nil
 }
 
+func gracefulShutdown(id string) {
+	fmt.Printf("[CTRL] Removing controller...\n")
+	err := hamctl.RemoveApp(utils.DbuildPrefix + utils.ControllerContext + "-" + id)
+	if err != nil {
+		fmt.Println("[CTRL] [ERROR] Failed to remove controller.")
+	}
+}
+
 // main is entry for controller node. args: [id n repo cmd]
 func main() {
 	fmt.Println("#############################")
@@ -27,15 +35,22 @@ func main() {
 	fmt.Println("##   By Mahdi Khancherli   ##")
 	fmt.Println("#############################")
 
+	fmt.Printf("%v\n", os.Args)
+
 	if len(os.Args) != 5 {
 		fmt.Printf("[CTRL] [ERROR] Wrong args count (%v, %v).", os.Args, len(os.Args))
 		return
 	}
 
+	fmt.Println("1")
 	id := os.Args[1]
+	fmt.Println("2")
 	n, _ := strconv.Atoi(os.Args[2])
+	fmt.Println("3")
 	repo := os.Args[3]
+	fmt.Println("4")
 	command := os.Args[4]
+	fmt.Println("5")
 
 	fmt.Printf("[CTRL] Running %v workers...\n", n)
 	for i := 1; i < n; i++ {
@@ -58,9 +73,5 @@ func main() {
 		}
 	}
 
-	fmt.Printf("[CTRL] Removing controller...\n")
-	err := hamctl.RemoveApp(utils.DbuildPrefix + utils.ControllerContext + "-" + id)
-	if err != nil {
-		fmt.Println("[CTRL] [ERROR] Failed to remove controller.")
-	}
+	gracefulShutdown(id)
 }
