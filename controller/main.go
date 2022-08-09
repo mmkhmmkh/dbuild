@@ -92,7 +92,7 @@ func main() {
 		workers = append(workers, utils.DbuildPrefix+utils.WorkerContext+"-"+id+"-"+strconv.Itoa(i))
 	}
 
-	time.Sleep(10 * time.Second)
+	time.Sleep(30 * time.Second)
 
 	fmt.Printf("[CTRL] Workers Ready.\n")
 
@@ -109,9 +109,7 @@ func main() {
 
 	fmt.Printf("[CTRL] Compiled!\n")
 
-	for true {
-		time.Sleep(10 * time.Second)
-	}
+	time.Sleep(1 * time.Hour)
 
 	//fmt.Printf("[CTRL] Removing %v workers...\n", n)
 	//for i := 1; i < n; i++ {
