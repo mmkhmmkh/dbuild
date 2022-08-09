@@ -11,7 +11,7 @@ RUN useradd -s /bin/bash distcc
 RUN wget -O distcc.tar.gz https://github.com/distcc/distcc/releases/download/v3.4/distcc-3.4.tar.gz; \
     tar -xf distcc.tar.gz
 RUN apt-get update; \
-    apt-get install -y python3-pip python3-dev libiberty-dev; \
+    apt-get install -y python3-pip python3-dev libiberty-dev git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison; \
     current_dir=$PWD; \
     cd /usr/local/bin; \
     ln -s /usr/bin/python3 python; \
