@@ -16,7 +16,10 @@ func Compile(dir string, command string, workers []string) error {
 	var args []string
 	args = append(args, fmt.Sprintf("export DISTCC_POTENTIAL_HOSTS=\"localhost %s\"", strings.Join(workers, " ")), ";")
 	args = append(args, "cd", dir, ";")
-	args = append(args, "pump", "make", command, "CC=distcc")
+	commandParts := strings.Split(command, "&&")
+	for _, commandPart := range commandParts {
+		args = append(args, "pump", strings.TrimSpace(commandPart), "CC=distcc")
+	}
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, os.Kill)
