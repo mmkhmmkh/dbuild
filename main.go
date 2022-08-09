@@ -9,7 +9,7 @@ import (
 	"strconv"
 )
 
-var controllersCount int = 1
+var controllersCount int
 
 func StartController(arguments string) error {
 	fmt.Printf("[ORCH] Starting new controller...\n")

@@ -297,6 +297,10 @@ func CreateApp(appName string, repoName string, branchName string, buildContext 
 		line := scanner.Text()
 		//fmt.Println(line)
 		if strings.Contains(line, "Plan 1") {
+			io.WriteString(stdinOut, "\x1B[B")
+			io.WriteString(stdinOut, "\x1B[B")
+			io.WriteString(stdinOut, "\x1B[B")
+			io.WriteString(stdinOut, "\x1B[B")
 			io.WriteString(stdinOut, "\r")
 			break
 		}
