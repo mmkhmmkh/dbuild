@@ -181,10 +181,6 @@ func CreateApp(appName string, repoName string, branchName string, buildContext 
 			// We have a cr terminated line
 			return i + 1, data[0:i], nil
 		}
-		//if i := bytes.IndexByte(data, ' '); i >= 0 {
-		//	// We have a space-terminated word.
-		//	return i + 1, data[0:i], nil
-		//}
 		if atEOF {
 			return len(data), data, nil
 		}
