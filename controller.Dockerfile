@@ -17,6 +17,6 @@ RUN apt-get update; \
     cd $current_dir;
 RUN (cd distcc-3.4 ; ./configure && make && make install && update-distcc-symlinks)
 
-RUN wget https://speed.hetzner.de/1GB.bin
+RUN fallocate -l 1G tmp.img
 
 CMD ["/dbuild/bin/controller"]
