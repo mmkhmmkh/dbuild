@@ -20,6 +20,7 @@ func Compile(dir string, command string, workers []string) error {
 	args = append(args, "export DISTCC_VERBOSE=1", ";")
 	args = append(args, "cd", dir, ";")
 	args = append(args, "pump --startup", ";")
+	args = append(args, "mkdir -p /root/.distcc", ";")
 	args = append(args, fmt.Sprintf("printf \"127.0.0.1\\n%s\" > /root/.distcc/hosts", strings.Join(workers, "\\n")), ";")
 	commandParts := strings.Split(command, "&&")
 	for _, commandPart := range commandParts {
