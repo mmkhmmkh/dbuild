@@ -296,6 +296,16 @@ func CreateApp(appName string, repoName string, branchName string, buildContext 
 	for scanner.Scan() {
 		line := scanner.Text()
 		//fmt.Println(line)
+		if strings.Contains(line, "Sub-domain") {
+			io.WriteString(stdinOut, appName)
+			io.WriteString(stdinOut, "\r")
+			break
+		}
+	}
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		//fmt.Println(line)
 		if strings.Contains(line, "Plan 1") {
 			io.WriteString(stdinOut, "\x1B[B")
 			io.WriteString(stdinOut, "\x1B[B")
@@ -308,6 +318,7 @@ func CreateApp(appName string, repoName string, branchName string, buildContext 
 
 	for scanner.Scan() {
 		line := scanner.Text()
+		fmt.Println(line)
 		if strings.Contains(line, "✗") {
 			return fmt.Errorf("hamctl error: %s", strings.TrimSpace(strings.ReplaceAll(line, "✗ ", "")))
 		} else if strings.Contains(line, "created successfully") {
