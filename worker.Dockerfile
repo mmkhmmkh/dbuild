@@ -20,6 +20,8 @@ RUN apt-get update; \
     cd $current_dir;
 RUN (cd distcc-3.4 ; ./configure && make && make install && update-distcc-symlinks)
 
+RUN ln -s /usr/lib/distcc /usr/local/lib/distcc
+
 
 # Define how to start distccd by default
 # (see "man distccd" for more information)
