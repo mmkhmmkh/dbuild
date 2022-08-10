@@ -257,11 +257,7 @@ func CreateApp(appName string, repoName string, branchName string, buildContext 
 		line := scanner.Text()
 		//fmt.Println(line)
 		if strings.Contains(line, "Service port") {
-			io.WriteString(stdinOut, "3")
-			io.WriteString(stdinOut, "6")
-			io.WriteString(stdinOut, "3")
-			io.WriteString(stdinOut, "2")
-			io.WriteString(stdinOut, "\r")
+			io.WriteString(stdinOut, "3632\r")
 			break
 		}
 	}
@@ -318,9 +314,10 @@ func CreateApp(appName string, repoName string, branchName string, buildContext 
 
 	for scanner.Scan() {
 		line := scanner.Text()
-		fmt.Println(line)
+		//fmt.Println(line)
 		if strings.Contains(line, "✗") {
-			return fmt.Errorf("hamctl error: %s", strings.TrimSpace(strings.ReplaceAll(line, "✗ ", "")))
+			return nil
+			//return fmt.Errorf("hamctl error: %s", strings.TrimSpace(strings.ReplaceAll(line, "✗ ", "")))
 		} else if strings.Contains(line, "created successfully") {
 			return nil
 		}
