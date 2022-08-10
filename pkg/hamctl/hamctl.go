@@ -257,7 +257,11 @@ func CreateApp(appName string, repoName string, branchName string, buildContext 
 		line := scanner.Text()
 		//fmt.Println(line)
 		if strings.Contains(line, "Service port") {
-			io.WriteString(stdinOut, "3632\r")
+			io.WriteString(stdinOut, "3")
+			io.WriteString(stdinOut, "6")
+			io.WriteString(stdinOut, "3")
+			io.WriteString(stdinOut, "2")
+			io.WriteString(stdinOut, "\r")
 			break
 		}
 	}
