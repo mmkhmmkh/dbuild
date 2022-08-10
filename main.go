@@ -46,8 +46,9 @@ func main() {
 	r.GET("/submit", func(c *gin.Context) {
 		n := c.Query("n")
 		repo := c.Query("repo")
+		branch := c.Query("branch")
 		command := c.Query("command")
-		err := StartController(fmt.Sprintf("%s %s %s %s", n, repo, os.Getenv("HAMCTLCONFIG"), command))
+		err := StartController(fmt.Sprintf("%s %s %s %s %s", n, repo, branch, os.Getenv("HAMCTLCONFIG"), command))
 		if err != nil {
 			fmt.Printf("[ORCH] [CTRL] [ERROR] %v\n", err)
 			return

@@ -42,7 +42,7 @@ func gracefulShutdown(id string) {
 	}
 }
 
-// main is entry for controller node. args: [id n repo env commands...]
+// main is entry for controller node. args: [id n repo branch env commands...]
 func main() {
 	fmt.Println("#############################")
 	fmt.Println("##    dbuild Controller    ##")
@@ -56,7 +56,7 @@ func main() {
 
 	args := strings.Split(os.Args[1], " ")
 
-	if len(args) < 5 {
+	if len(args) < 6 {
 		fmt.Printf("[CTRL] [ERROR] Wrong args count.\n")
 		return
 	}
@@ -64,9 +64,10 @@ func main() {
 	id := args[0]
 	n, _ := strconv.Atoi(args[1])
 	repo := args[2]
-	env := args[3]
+	branch := args[3]
+	env := args[4]
 	var commands []string
-	for i := 4; i < len(args); i++ {
+	for i := 5; i < len(args); i++ {
 		commands = append(commands, args[i])
 	}
 	command := strings.Join(commands, " ")
@@ -96,7 +97,7 @@ func main() {
 
 	fmt.Printf("[CTRL] Workers Ready.\n")
 
-	err = git.CloneRepo(repo, CloneDirectory)
+	err = git.CloneRepo(repo, branch, CloneDirectory)
 	if err != nil {
 		fmt.Printf("[CTRL] [ERROR] %v\n", err)
 		return

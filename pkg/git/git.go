@@ -12,9 +12,10 @@ const (
 	gitBinPath = "/usr/bin/git"
 )
 
-func CloneRepo(url string, dir string) error {
+func CloneRepo(url, branch string, dir string) error {
 	var args []string
 	args = append(args, "clone")
+	args = append(args, "-b", branch)
 	args = append(args, "--depth", "1")
 	args = append(args, url)
 	args = append(args, dir)
