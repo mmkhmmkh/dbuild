@@ -17,14 +17,15 @@ const (
 func Compile(dir string, command string, workers []string) error {
 	var args []string
 	args = append(args, fmt.Sprintf("export DISTCC_POTENTIAL_HOSTS=\"localhost %s\"", strings.Join(workers, " ")), ";")
+	args = append(args, "export DISTCC_VERBOSE=1", ";")
 	args = append(args, "cd", dir, ";")
+	args = append(args, "pump --startup", ";")
+	args = append(args, fmt.Sprintf("printf \"127.0.0.1\\n%s\" > /root/.distcc/hosts", strings.Join(workers, "\\n")), ";")
 	commandParts := strings.Split(command, "&&")
-	for i, commandPart := range commandParts {
-		args = append(args, "pump", strings.TrimSpace(commandPart), "CC=distcc")
-		if i != len(commandParts)-1 {
-			args = append(args, ";")
-		}
+	for _, commandPart := range commandParts {
+		args = append(args, strings.TrimSpace(commandPart), "CC=distcc", ";")
 	}
+	args = append(args, "pump --shutdown")
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, os.Kill)
