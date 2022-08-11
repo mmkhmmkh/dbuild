@@ -12,7 +12,7 @@ const (
 	bashBinPath = "/bin/bash"
 )
 
-func Compile(dir, precommand, command, postcommand string, workers []string) error {
+func Compile(dir string, command string, workers []string) error {
 	var args []string
 	args = append(args, "(")
 	args = append(args, fmt.Sprintf("export DISTCC_POTENTIAL_HOSTS=\"localhost %s\"", strings.Join(workers, " ")), ";")
@@ -21,15 +21,9 @@ func Compile(dir, precommand, command, postcommand string, workers []string) err
 	args = append(args, "pump --startup", ";")
 	args = append(args, "mkdir -p /root/.distcc", ";")
 	args = append(args, fmt.Sprintf("printf \"127.0.0.1\\n%s\" > /root/.distcc/hosts", strings.Join(workers, "\\n")), ";")
-	if precommand != "" {
-		args = append(args, strings.TrimSpace(precommand), ";")
-	}
 	commandParts := strings.Split(command, "&&")
 	for _, commandPart := range commandParts {
 		args = append(args, strings.TrimSpace(commandPart), "CC=distcc", ";")
-	}
-	if postcommand != "" {
-		args = append(args, strings.TrimSpace(postcommand), ";")
 	}
 	args = append(args, "pump --shutdown")
 	args = append(args, ")")
