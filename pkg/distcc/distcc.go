@@ -17,6 +17,7 @@ func Compile(dir string, command string, workers []string) error {
 	args = append(args, "(")
 	args = append(args, fmt.Sprintf("export DISTCC_POTENTIAL_HOSTS=\"localhost %s\"", strings.Join(workers, " ")), ";")
 	args = append(args, "export DISTCC_VERBOSE=1", ";")
+	args = append(args, "export CC=distcc", ";")
 	args = append(args, "cd", dir, ";")
 	args = append(args, "pump --startup", ";")
 	args = append(args, "mkdir -p /root/.distcc", ";")
