@@ -1,20 +1,42 @@
 package s3
 
 import (
-	"log"
-
-	"github.com/minio/minio-go/v7/pkg/credentials"
+	"github.com/minio/minio-go"
+	"strings"
 )
 
-func NewS3(endpoint, accessKeyID, secretAccessKey string, useSSL bool) {
+const (
+	BUCKET_PREFIX = "dbuild-"
+)
+
+func NewS3Client(endpoint, accessKeyID, secretAccessKey string, useSSL bool) (*minio.Client, error) {
 	// Initialize minio client object.
-	minioClient, err := minio.New(endpoint, &minio.Options{
-		Creds:  credentials.NewStaticV4(accessKeyID, secretAccessKey, ""),
-		Secure: useSSL,
-	})
+	minioClient, err := minio.New(endpoint, accessKeyID, secretAccessKey, useSSL)
 	if err != nil {
-		log.Fatalln(err)
+		return nil, err
 	}
 
-	log.Printf("%#v\n", minioClient) // minioClient is now setup
+	return minioClient, nil
+}
+
+func Upload(id, bucketName, path string, client *minio.Client) error {
+	bucketExists, err := client.BucketExists(bucketName)
+	if err != nil {
+		return err
+	}
+	if !bucketExists {
+		err = client.MakeBucket(bucketName, "")
+		if err != nil {
+			return err
+		}
+	}
+
+	parts := strings.Split(path, "/")
+
+	_, err = client.FPutObject(bucketName, parts[len(parts)-1]+"-"+BUCKET_PREFIX+id, path, minio.PutObjectOptions{ContentType: "application/octet-stream"})
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

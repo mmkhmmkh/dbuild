@@ -16,6 +16,7 @@ const (
 	dbuildNamespace  = "vbhammk-dbuild"
 	clusterName      = "hamravesh-c11"
 	organizationName = "vbhammk"
+	DEBUG            = true
 )
 
 func Initialize(hamctlconfig string) error {
@@ -301,7 +302,9 @@ func CreateApp(appName string, repoName string, branchName string, buildContext 
 
 	for scanner.Scan() {
 		line := scanner.Text()
-		//fmt.Println(line)
+		if DEBUG {
+			fmt.Println(line)
+		}
 		if strings.Contains(line, "Plan 1") {
 			io.WriteString(stdinOut, "\x1B[B")
 			io.WriteString(stdinOut, "\x1B[B")
@@ -314,7 +317,9 @@ func CreateApp(appName string, repoName string, branchName string, buildContext 
 
 	for scanner.Scan() {
 		line := scanner.Text()
-		//fmt.Println(line)
+		if DEBUG {
+			fmt.Println(line)
+		}
 		if strings.Contains(line, "✗") {
 			return nil
 			//return fmt.Errorf("hamctl error: %s", strings.TrimSpace(strings.ReplaceAll(line, "✗ ", "")))

@@ -5,6 +5,7 @@ import (
 	"github.com/mmkhmmkh/dbuild/pkg/distcc"
 	"github.com/mmkhmmkh/dbuild/pkg/git"
 	"github.com/mmkhmmkh/dbuild/pkg/hamctl"
+	"github.com/mmkhmmkh/dbuild/pkg/s3"
 	"github.com/mmkhmmkh/dbuild/pkg/utils"
 	"os"
 	"strconv"
@@ -16,7 +17,6 @@ const (
 	CloneDirectory = "repo"
 )
 
-// func StartWorker(controllerID, workerID string, arguments string) error {
 func StartWorker(controllerID, workerID string) error {
 
 	workerName := utils.DbuildPrefix + utils.WorkerContext + "-" + controllerID + "-" + workerID
@@ -42,7 +42,7 @@ func gracefulShutdown(id string) {
 	}
 }
 
-// main is entry for controller node. args: [id n repo branch env commands...]
+// main is entry for controller node. args: [id n repo branch output s3endpoint s3bucket s3access s3secret env commands...]
 func main() {
 	fmt.Println("#############################")
 	fmt.Println("##    dbuild Controller    ##")
@@ -56,7 +56,7 @@ func main() {
 
 	args := strings.Split(os.Args[1], " ")
 
-	if len(args) < 6 {
+	if len(args) < 7 {
 		fmt.Printf("[CTRL] [ERROR] Wrong args count.\n")
 		return
 	}
@@ -65,9 +65,14 @@ func main() {
 	n, _ := strconv.Atoi(args[1])
 	repo := args[2]
 	branch := args[3]
-	env := args[4]
+	output := args[4]
+	s3endpoint := args[5]
+	s3bucket := args[6]
+	s3access := args[7]
+	s3secret := args[8]
+	env := args[9]
 	var commands []string
-	for i := 5; i < len(args); i++ {
+	for i := 10; i < len(args); i++ {
 		commands = append(commands, args[i])
 	}
 	command := strings.Join(commands, " ")
@@ -109,6 +114,20 @@ func main() {
 	}
 
 	fmt.Printf("[CTRL] Compiled!\n")
+
+	s3client, err := s3.NewS3Client(s3endpoint, s3access, s3secret, true)
+	if err != nil {
+		fmt.Printf("[CTRL] [ERROR] %v\n", err)
+	}
+
+	fmt.Printf("[CTRL] S3 Connected.\n")
+
+	err = s3.Upload(utils.DbuildPrefix+utils.ControllerContext+"-"+id, s3bucket, utils.DbuildDir+"/"+CloneDirectory+"/"+output, s3client)
+	if err != nil {
+		fmt.Printf("[CTRL] [ERROR] %v\n", err)
+	}
+
+	fmt.Printf("[CTRL] Uploaded.\n")
 
 	time.Sleep(1 * time.Hour)
 

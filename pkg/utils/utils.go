@@ -6,4 +6,5 @@ const (
 	WorkerContext     = "worker"
 	DbuildBranch      = "master"
 	DbuildPrefix      = "dbuild-"
+	DbuildDir         = "/dbuild"
 )
