@@ -2,11 +2,8 @@ package s3
 
 import (
 	"github.com/minio/minio-go"
+	"github.com/mmkhmmkh/dbuild/pkg/utils"
 	"strings"
-)
-
-const (
-	BUCKET_PREFIX = "dbuild-"
 )
 
 func NewS3Client(endpoint, accessKeyID, secretAccessKey string, useSSL bool) (*minio.Client, error) {
@@ -33,7 +30,7 @@ func Upload(id, bucketName, path string, client *minio.Client) error {
 
 	parts := strings.Split(path, "/")
 
-	_, err = client.FPutObject(bucketName, parts[len(parts)-1]+"-"+BUCKET_PREFIX+id, path, minio.PutObjectOptions{ContentType: "application/octet-stream"})
+	_, err = client.FPutObject(bucketName, parts[len(parts)-1]+"-"+utils.DbuildPrefix+id, path, minio.PutObjectOptions{ContentType: "application/octet-stream"})
 	if err != nil {
 		return err
 	}

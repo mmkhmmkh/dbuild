@@ -126,7 +126,7 @@ func main() {
 
 	fmt.Printf("[CTRL] S3 Connected.\n")
 
-	err = s3.Upload(utils.DbuildPrefix+utils.ControllerContext+"-"+id, s3bucket, utils.DbuildDir+"/"+CloneDirectory+"/"+output, s3client)
+	err = s3.Upload(id, s3bucket, utils.DbuildDir+"/"+CloneDirectory+"/"+output, s3client)
 	if err != nil {
 		fmt.Printf("[CTRL] [ERROR] %v\n", err)
 	}

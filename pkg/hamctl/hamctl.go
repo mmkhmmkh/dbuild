@@ -16,7 +16,7 @@ const (
 	dbuildNamespace  = "vbhammk-dbuild"
 	clusterName      = "hamravesh-c11"
 	organizationName = "vbhammk"
-	DEBUG            = true
+	DEBUG            = false
 )
 
 func Initialize(hamctlconfig string) error {
