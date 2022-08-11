@@ -29,7 +29,7 @@ func main() {
 	fmt.Println("##   dbuild Orchestrator   ##")
 	fmt.Println("##   By Mahdi Khancherli   ##")
 	fmt.Println("#############################")
-
+	// http://localhost:8080/submit?n=2&command=cp%20minimalconfig%20.config%20%26%26%20make%20-j8%20bzImage&repo=https://github.com/liva/minimal-linux.git&branch=master
 	err := hamctl.Initialize(os.Getenv("HAMCTLCONFIG"))
 	if err != nil {
 		fmt.Printf("[ORCH] [ERROR] %v\n", err)
@@ -47,8 +47,10 @@ func main() {
 		n := c.Query("n")
 		repo := c.Query("repo")
 		branch := c.Query("branch")
+		precommand := c.Query("precommand")
+		postcommand := c.Query("postcommand")
 		command := c.Query("command")
-		err := StartController(fmt.Sprintf("%s %s %s %s %s", n, repo, branch, os.Getenv("HAMCTLCONFIG"), command))
+		err := StartController(fmt.Sprintf("%s %s %s %s %s %s %s", n, repo, branch, os.Getenv("HAMCTLCONFIG"), precommand, postcommand, command))
 		if err != nil {
 			fmt.Printf("[ORCH] [CTRL] [ERROR] %v\n", err)
 			return
