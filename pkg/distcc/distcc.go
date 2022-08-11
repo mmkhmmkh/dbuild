@@ -38,12 +38,6 @@ func Compile(dir string, command string, workers []string) error {
 
 	fmt.Println("Running: ", bashBinPath, fmt.Sprintf("-c '%s'", strings.Join(args, " ")))
 
-	stdoutIn, err := cmd.StdoutPipe()
-	if err != nil {
-		return fmt.Errorf("failed getting distcc output with args (%s) with error %s", args, err)
-	}
-	defer stdoutIn.Close()
-
 	stderrIn, err := cmd.StderrPipe()
 	if err != nil {
 		return fmt.Errorf("failed getting distcc err with args (%s) with error %s", args, err)
@@ -62,35 +56,6 @@ func Compile(dir string, command string, workers []string) error {
 			if err := cmd.Process.Kill(); err != nil {
 				fmt.Printf("failed to kill process: %v", err)
 			}
-		}
-	}()
-
-	go func() {
-		split := func(data []byte, atEOF bool) (advance int, token []byte, spliterror error) {
-			if atEOF && len(data) == 0 {
-				return 0, nil, nil
-			}
-			if i := bytes.IndexByte(data, '\n'); i >= 0 {
-				// We have a full newline-terminated line.
-				return i + 1, data[0:i], nil
-			}
-			if i := bytes.IndexByte(data, '\r'); i >= 0 {
-				// We have a cr terminated line
-				return i + 1, data[0:i], nil
-			}
-			if atEOF {
-				return len(data), data, nil
-			}
-
-			return 0, nil, nil
-		}
-		scanner := bufio.NewScanner(stdoutIn)
-		scanner.Split(split)
-		buf := make([]byte, 2)
-		scanner.Buffer(buf, bufio.MaxScanTokenSize)
-		for scanner.Scan() {
-			line := scanner.Text()
-			fmt.Println(line)
 		}
 	}()
 
