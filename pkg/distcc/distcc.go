@@ -34,7 +34,7 @@ func Compile(dir string, command string, workers []string) error {
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, os.Kill)
 
-	cmd := exec.Command(bashBinPath, fmt.Sprintf("-c %s", strings.Join(args, " ")))
+	cmd := exec.Command(bashBinPath, "-c", strings.Join(args, " "))
 
 	fmt.Println("Running: ", bashBinPath, fmt.Sprintf("-c '%s'", strings.Join(args, " ")))
 
