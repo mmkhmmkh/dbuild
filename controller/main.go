@@ -135,13 +135,13 @@ func main() {
 
 	time.Sleep(1 * time.Hour)
 
-	//fmt.Printf("[CTRL] Removing %v workers...\n", n)
-	//for i := 1; i < n; i++ {
-	//	err := hamctl.RemoveApp(utils.DbuildPrefix + utils.WorkerContext + "-" + id + "-" + strconv.Itoa(i))
-	//	if err != nil {
-	//		fmt.Println("[CTRL] [WORKER] [ERROR] Failed to remove worker.")
-	//	}
-	//}
-	//
-	//gracefulShutdown(id)
+	fmt.Printf("[CTRL] Removing %v workers...\n", n)
+	for i := 1; i <= n; i++ {
+		err := hamctl.RemoveApp(utils.DbuildPrefix + utils.WorkerContext + "-" + id + "-" + strconv.Itoa(i))
+		if err != nil {
+			fmt.Println("[CTRL] [WORKER] [ERROR] Failed to remove worker.")
+		}
+	}
+
+	gracefulShutdown(id)
 }
