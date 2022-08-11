@@ -98,15 +98,19 @@ func main() {
 		workers = append(workers, utils.DbuildPrefix+utils.WorkerContext+"-"+id+"-"+strconv.Itoa(i))
 	}
 
-	time.Sleep(30 * time.Second)
+	fmt.Printf("[CTRL] Workers created. Waiting for them to be ready...\n")
 
-	fmt.Printf("[CTRL] Workers Ready.\n")
+	time.Sleep(2 * time.Minute)
+
+	fmt.Printf("[CTRL] Workers ready.\n")
 
 	err = git.CloneRepo(repo, branch, CloneDirectory)
 	if err != nil {
 		fmt.Printf("[CTRL] [ERROR] %v\n", err)
 		return
 	}
+
+	fmt.Printf("[CTRL] Git clone completed.\n")
 
 	err = distcc.Compile(CloneDirectory, command, workers)
 	if err != nil {
