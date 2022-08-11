@@ -100,7 +100,7 @@ func main() {
 
 	fmt.Printf("[CTRL] Workers created. Waiting for them to be ready...\n")
 
-	time.Sleep(2 * time.Minute)
+	time.Sleep(90 * time.Second)
 
 	fmt.Printf("[CTRL] Workers ready.\n")
 
