@@ -30,7 +30,6 @@ func main() {
 	fmt.Println("##   By Mahdi Khancherli   ##")
 	fmt.Println("#############################")
 	// arch/x86/boot/bzImage
-	// http://localhost:8080/submit?n=6&command=cp%20minimalconfig%20.config%20%26%26%20make%20-j24%20bzImage%20CC%3Ddistcc&repo=https://github.com/liva/minimal-linux.git&branch=master&output=arch/x86/boot/bzImage&s3endpoint=kise-thr-nd-1.sotoon.cloud&s3bucket=delivery-neda-mmkh&s3access=0e54adbb5ddc063081dfd9212c0234744e607c12&s3secret=e8334fa7da55e28d370a6bd4bd8341b3c8e31b0fd1342285597f38713b83708d70a06ca88a4fdbad
 	err := hamctl.Initialize(os.Getenv("HAMCTLCONFIG"))
 	if err != nil {
 		fmt.Printf("[ORCH] [ERROR] %v\n", err)
